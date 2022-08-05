@@ -1,6 +1,6 @@
 # graphql-ts-server-boilerplate
 
-* this repo is a clone of https://github.com/benawad/graphql-ts-server-boilerplate, but with latest packages *
+\* this repo is a clone of https://github.com/benawad/graphql-ts-server-boilerplate, but with latest packages *
 
 # What's new
 - TypeORM version 0.3.7 (latest)

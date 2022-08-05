@@ -1,24 +1,27 @@
 {
-   "name": "graphql-ts-server-boilerplate",
-   "version": "0.0.1",
-   "description": "Awesome project developed with TypeORM.",
-   "type": "commonjs",
-   "devDependencies": {
-      "@types/node": "^18.6.4",
-      "@typescript-eslint/eslint-plugin": "^5.32.0",
-      "@typescript-eslint/parser": "^5.32.0",
-      "eslint": "^8.21.0",
-      "eslint-config-prettier": "^8.5.0",
-      "ts-node": "10.9.1",
-      "typescript": "4.7.4"
-   },
-   "dependencies": {
-      "pg": "^8.7.3",
-      "reflect-metadata": "^0.1.13",
-      "typeorm": "0.3.7"
-   },
-   "scripts": {
-      "start": "ts-node src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
-   }
+  "name": "graphql-ts-server-boilerplate",
+  "version": "0.0.1",
+  "description": "Awesome project developed with TypeORM.",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^18.6.4",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "nodemon": "^2.0.19",
+    "ts-node": "10.9.1",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "graphql": "^16.5.0",
+    "graphql-yoga": "^2.13.6",
+    "pg": "^8.7.3",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "0.3.7"
+  },
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs"
+  }
 }
