@@ -15,7 +15,7 @@ A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
 
 1. Clone project
 ```
-git clone https://github.com/benawad/graphql-ts-server-boilerplate.git
+git clone https://github.com/0xsuk/graphql-ts-server-boilerplate.git
 ```
 2. cd into folder
 ```
@@ -30,7 +30,7 @@ yarn
 ```
 createdb graphql-ts-server-boilerplate
 ```
-6. [Add a user](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e) with the username `postgres` and and no password. (You can change what these values are in the [ormconfig.json](https://github.com/benawad/graphql-ts-server-boilerplate/blob/master/ormconfig.json))
+6. [Add a user](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e) with the username `postgres` and password `password`. (You can change what these values are in the [data-source.ts](https://github.com/0xsuk/graphql-ts-server-boilerplate/blob/master/src/data-src.ts))
 
 7. Install and start Redis
 
