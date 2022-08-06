@@ -32,9 +32,10 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
-    "start": "nodemon --exec ts-node --files src/index.ts",
+    "start": "NODE_ENV=development nodemon --exec ts-node --files src/index.ts",
+    "test-server": "NODE_ENV=test ts-node --files src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
   },
   "jest": {
