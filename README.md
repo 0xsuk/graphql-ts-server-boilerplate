@@ -4,10 +4,11 @@
 
 # What's new
 - TypeORM version 0.3.7 (latest)
- - ormconfig.json is no longer generated. see breaking changes https://github.com/typeorm/typeorm/releases/tag/0.3.0
- - configure database information in src/data-source.ts
+  - ormconfig.json is no longer generated. see breaking changes https://github.com/typeorm/typeorm/releases/tag/0.3.0
+  - configure database information in src/data-source.ts
 - other latest dependencies 
 - tslint is now deprecated, use eslint instead
+- graphql-import is now deprecated, use graphql-tools
 
 A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
 

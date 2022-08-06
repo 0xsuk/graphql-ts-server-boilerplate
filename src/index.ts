@@ -1,12 +1,16 @@
 import { createServer } from "@graphql-yoga/node";
+import { loadSchemaSync } from "@graphql-tools/load";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { join } from "path";
+import { resolvers } from "./resolvers";
+//https://www.graphql-tools.com/docs/migration/migration-from-import
+const typeDefs = loadSchemaSync(join(__dirname, "schema.graphql"), {
+  loaders: [new GraphQLFileLoader()],
+});
 
 const server = createServer({
   schema: {
-    typeDefs: /* GraphQL */ `
-      type Query {
-        hello(name: String): String!
-      }
-    `,
+    typeDefs,
     resolvers: {
       Query: {
         hello: (_: any, { name }: any) =>
