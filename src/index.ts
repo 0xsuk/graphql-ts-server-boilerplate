@@ -4,21 +4,24 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { join } from "path";
 import { AppDataSource } from "./data-source";
 import { resolvers } from "./resolvers";
-//import { createConnection } from "typeorm";
-//https://www.graphql-tools.com/docs/migration/migration-from-import
-const typeDefs = loadSchemaSync(join(__dirname, "schema.graphql"), {
-  loaders: [new GraphQLFileLoader()],
-});
 
-const server = createServer({
-  schema: {
-    typeDefs,
-    resolvers,
-  },
-});
+export const startServer = async () => {
+  //https://www.graphql-tools.com/docs/migration/migration-from-import
+  const typeDefs = loadSchemaSync(join(__dirname, "schema.graphql"), {
+    loaders: [new GraphQLFileLoader()],
+  });
 
-//https://github.com/typeorm/typeorm/issues/7428
-//https://typeorm.io/data-source
-AppDataSource.initialize().then(() => {
-  server.start();
-});
+  const server = createServer({
+    schema: {
+      typeDefs,
+      resolvers,
+    },
+  });
+
+  //https://github.com/typeorm/typeorm/issues/7428
+  //https://typeorm.io/data-source
+  await AppDataSource.initialize();
+  await server.start();
+};
+
+startServer();
