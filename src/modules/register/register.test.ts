@@ -12,9 +12,9 @@ import {
 let host = "";
 
 beforeAll(async () => {
-  const app = await startServer();
+  const server = await startServer();
 
-  const { port } = app.address() as AddressInfo;
+  const { port } = server.address() as AddressInfo;
 
   host = `http://127.0.0.1:${port}/graphql`;
 });

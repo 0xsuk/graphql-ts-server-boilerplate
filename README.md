@@ -9,6 +9,7 @@
 - other latest dependencies 
 - tslint is now deprecated, use eslint instead
 - graphql-import is now deprecated, use graphql-tools
+- use express as dependencies
 
 A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
 

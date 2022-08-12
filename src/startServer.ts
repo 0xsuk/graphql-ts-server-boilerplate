@@ -6,12 +6,16 @@ import * as fs from "fs";
 import * as path from "path";
 import { makeExecutableSchema, mergeSchemas } from "@graphql-tools/schema";
 import { GraphQLSchema } from "graphql";
+import Redis from "ioredis";
+import * as express from "express";
+import { User } from "./entity/User";
 
 export const startServer = async () => {
   const schemas: GraphQLSchema[] = [];
   const folders = fs.readdirSync(path.join(__dirname, "./modules"));
   folders.forEach((folder) => {
     const { resolvers } = require(`./modules/${folder}/resolvers`);
+    //https://www.graphql-tools.com/docs/migration/migration-from-import
     const typeDefs = loadSchemaSync(
       path.join(__dirname, `./modules/${folder}/schema.graphql`),
       {
@@ -22,18 +26,36 @@ export const startServer = async () => {
     schemas.push(makeExecutableSchema({ typeDefs, resolvers }));
   });
 
-  //https://www.graphql-tools.com/docs/migration/migration-from-import
+  const redis = new Redis();
 
-  const server = createServer({
+  const graphQLServer = createServer({
     schema: mergeSchemas({ schemas }),
-    port: process.env.NODE_ENV === "test" ? 0 : 4000, //TODO what is port 0?
+    context: ({ request }) => ({
+      redis,
+      url: request.url,
+    }),
+  });
+
+  const app = express();
+  app.use("/graphql", graphQLServer);
+
+  app.get("/confirm/:id", async (req, res) => {
+    const { id } = req.params;
+    const userId = await redis.get(id);
+    if (!userId) {
+      res.send("link does not exist");
+      return;
+    }
+    User.update({ id: userId }, { confirmed: true });
+    res.send("ok");
   });
 
   //https://github.com/typeorm/typeorm/issues/7428
   //https://typeorm.io/data-source
   await createTypeormConn();
-  const app = await server.start();
-  console.log("Server is running on localhost:4000");
 
-  return app;
+  const port = process.env.NODE_ENV === "test" ? 0 : 4000;
+  return app.listen(port, () => {
+    console.log("Server is running on port", port);
+  });
 };
