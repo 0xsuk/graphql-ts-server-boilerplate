@@ -27,7 +27,7 @@ beforeAll(async () => {
 });
 
 describe("Register User", () => {
-  it("check correct email and password", async () => {
+  it("check for duplicate emails", async () => {
     const response = await request(endpoint, mutation(email, password));
     expect(response).toEqual({ register: null });
     const users = await User.find({ where: { email } }); //accessing database directly, we have to explicitly specify datasource here again(why?)
@@ -35,9 +35,6 @@ describe("Register User", () => {
     const user = users[0];
     expect(user.email).toEqual(email);
     expect(user.password).not.toEqual(password);
-  });
-
-  it("check for duplicate emails", async () => {
     const response2 = await request(endpoint, mutation(email, password));
     expect(response2.register).toEqual([
       {

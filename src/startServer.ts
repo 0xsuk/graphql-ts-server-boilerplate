@@ -43,10 +43,11 @@ export const startServer = async () => {
     const { id } = req.params;
     const userId = await redis.get(id);
     if (!userId) {
-      res.send("link does not exist");
+      res.send("invalid");
       return;
     }
-    User.update({ id: userId }, { confirmed: true });
+    await User.update({ id: userId }, { confirmed: true });
+    await redis.del(id);
     res.send("ok");
   });
 
