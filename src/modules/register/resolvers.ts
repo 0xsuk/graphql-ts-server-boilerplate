@@ -10,6 +10,7 @@ import {
   passwordNotLongEnough,
 } from "./errorMessages";
 import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
+import { MutationRegisterArgs } from "../../types/schema";
 
 const schema = yup.object().shape({
   email: yup.string().min(3, emailNotLongEnough).max(255).email(invalidEmail),
@@ -20,7 +21,7 @@ export const resolvers: ResolverMap = {
   Mutation: {
     register: async (
       _,
-      args: GQL.IRegisterOnMutationArguments,
+      args: MutationRegisterArgs,
       {
         redis,
         url, //protocol + hostname + /

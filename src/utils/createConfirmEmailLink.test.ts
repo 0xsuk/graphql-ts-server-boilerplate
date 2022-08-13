@@ -1,48 +1,46 @@
 import axios from "axios";
 import Redis from "ioredis";
+import { DataSource } from "typeorm";
 import { User } from "../entity/User";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { createTypeormConn } from "./createTypeormConn";
 
 let redis = new Redis();
+
+let conn: DataSource;
+
 beforeAll(async () => {
-  await createTypeormConn();
+  conn = await createTypeormConn();
 });
 
-describe("test createConfirmEmailLink", () => {
-  it("check it confirms user and cleans key in redis", async () => {
-    let user = await User.create({
-      email: "bob5@email.com",
-      password: "asdfasdf",
-    }).save(); //gives error for the second test run, cause dropschema is not executed somehow
+afterAll(async () => {
+  conn.destroy();
+  //console.log("connection destroyed", conn !== undefined);
+});
 
-    const url = await createConfirmEmailLink(
-      process.env.TEST_HOST as string,
-      user.id,
-      redis
-    );
+it("check it confirms user and cleans key in redis", async () => {
+  let user = await User.create({
+    email: "bob5@email.com",
+    password: "asdfasdf",
+  }).save(); //gives error for the second test run, cause dropschema is not executed somehow
 
-    const response = await axios.get(url);
+  const url = await createConfirmEmailLink(
+    process.env.TEST_HOST as string,
+    user.id,
+    redis
+  );
 
-    const text = await response.data;
-    expect(text).toEqual("ok");
-    user = (await User.findOne({ where: { id: user.id } })) as User;
+  const response = await axios.get(url);
 
-    expect(user.confirmed).toBeTruthy();
+  const text = await response.data;
+  expect(text).toEqual("ok");
+  user = (await User.findOne({ where: { id: user.id } })) as User;
 
-    const chunks = url.split("/");
-    const key = chunks[chunks.length - 1];
-    const value = await redis.get(key);
+  expect(user.confirmed).toBeTruthy();
 
-    expect(value).toBeNull();
-  });
+  const chunks = url.split("/");
+  const key = chunks[chunks.length - 1];
+  const value = await redis.get(key);
 
-  it("sends invalid back if bad id is sent", async () => {
-    const response = await axios.get(
-      `${process.env.TEST_HOST}/confirm/12312312`
-    );
-
-    const text = await response.data;
-    expect(text).toEqual("invalid");
-  });
+  expect(value).toBeNull();
 });

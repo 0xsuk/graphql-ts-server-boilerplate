@@ -9,9 +9,9 @@
 - other latest dependencies 
 - tslint is now deprecated, use eslint instead
 - graphql-import is now deprecated, use graphql-tools
-- use express as dependency
 - node-fetch does not work well with ts jest https://github.com/node-fetch/node-fetch/issues/1289, so use axios instead
   - No need for fetch library anymore as node.js v18 (yet to come) has built-in fetch API
+- use graphql-codegen instead of gql2ts as it is more popular 
 
 A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
 
