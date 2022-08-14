@@ -14,7 +14,14 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  login?: Maybe<Array<Error>>;
   register?: Maybe<Array<Error>>;
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 

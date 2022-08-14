@@ -8,7 +8,7 @@ import {
   passwordNotLongEnough,
 } from "./errorMessages";
 
-let endpoint = process.env.TEST_HOST + "/graphql";
+const endpoint = process.env.TEST_HOST as string;
 
 const email = "toasdfp@bob.com";
 const password = "jasdf";

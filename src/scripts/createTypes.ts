@@ -8,7 +8,7 @@ import path = require("path");
 //READ: https://www.graphql-code-generator.com/docs/advanced/programmatic-usage
 (async () => {
   const schema: GraphQLSchema = genSchema();
-  const outputFile = path.join(__dirname, "../types/schema2.d.ts");
+  const outputFile = path.join(__dirname, "../types/schema.d.ts");
   const output = await codegen({
     documents: [],
     config: {},

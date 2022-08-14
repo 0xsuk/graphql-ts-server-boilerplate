@@ -15,10 +15,9 @@ export const startServer = async () => {
   });
 
   const app = express();
-  app.use("/graphql", graphQLServer);
 
   app.get("/confirm/:id", confirmEmail);
-
+  app.use("/", graphQLServer); //has to be at the last of route definitions because graphQLServer intercepts every route
   //https://github.com/typeorm/typeorm/issues/7428
   //https://typeorm.io/data-source
   await createTypeormConn();
