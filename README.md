@@ -12,6 +12,7 @@
 - node-fetch does not work well with ts jest https://github.com/node-fetch/node-fetch/issues/1289, so use axios instead
   - No need for fetch library anymore as node.js v18 (yet to come) has built-in fetch API
 - use graphql-codegen instead of gql2ts as it is more popular 
+- use nodemailer instead of sparkpost
 
 A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
 
@@ -34,7 +35,7 @@ yarn
 ```
 createdb graphql-ts-server-boilerplate
 ```
-6. [Add a user](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e) with the username `postgres` and password `password`. (You can change what these values are in the [data-source.ts](https://github.com/0xsuk/graphql-ts-server-boilerplate/blob/master/src/data-src.ts))
+6. [Add a user](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e) with the username `postgres` and password `postgres`. (You can change what these values are in the [data-source.ts](https://github.com/0xsuk/graphql-ts-server-boilerplate/blob/master/src/data-src.ts))
 
 7. Install and start Redis
 
