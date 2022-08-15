@@ -20,14 +20,7 @@ const schema = yup.object().shape({
 
 export const resolvers: ResolverMap = {
   Mutation: {
-    register: async (
-      _,
-      args: MutationRegisterArgs,
-      {
-        redis,
-        url, //protocol + hostname + /
-      }
-    ) => {
+    register: async (_, args: MutationRegisterArgs, { redis, url }) => {
       try {
         await schema.validate(args, { abortEarly: false }); //await is important
       } catch (err) {

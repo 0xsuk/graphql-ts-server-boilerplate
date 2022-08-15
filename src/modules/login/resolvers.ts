@@ -13,7 +13,7 @@ const errorResponse = [
 
 export const resolvers: ResolverMap = {
   Mutation: {
-    login: async (_, { email, password }: MutationLoginArgs) => {
+    login: async (_, { email, password }: MutationLoginArgs, { session }) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return errorResponse;
@@ -35,6 +35,11 @@ export const resolvers: ResolverMap = {
         return errorResponse;
       }
 
+      //login successfull
+      session.userId = user.id;
+
+      //TODO return cookie
+      //req.session;
       return null;
     },
   },
