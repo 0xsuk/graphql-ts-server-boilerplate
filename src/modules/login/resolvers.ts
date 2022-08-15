@@ -38,8 +38,6 @@ export const resolvers: ResolverMap = {
       //login successfull
       session.userId = user.id;
 
-      //TODO return cookie
-      //req.session;
       return null;
     },
   },

@@ -1,4 +1,5 @@
 import request from "graphql-request";
+import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
 import {
@@ -22,8 +23,14 @@ mutation {
 }
 `;
 
+let conn: DataSource;
+
 beforeAll(async () => {
-  await createTypeormConn();
+  conn = await createTypeormConn();
+});
+
+afterAll(async () => {
+  conn.destroy();
 });
 
 describe("Register User", () => {

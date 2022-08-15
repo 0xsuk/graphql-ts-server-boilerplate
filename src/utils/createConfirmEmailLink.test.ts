@@ -15,7 +15,6 @@ beforeAll(async () => {
 
 afterAll(async () => {
   conn.destroy();
-  //console.log("connection destroyed", conn !== undefined);
 });
 
 it("check it confirms user and cleans key in redis", async () => {

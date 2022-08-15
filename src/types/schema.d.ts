@@ -36,8 +36,15 @@ export type Error = {
   message: Scalars['String'];
 };
 
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  email: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  me?: Maybe<User>;
   hello: Scalars['String'];
 };
 

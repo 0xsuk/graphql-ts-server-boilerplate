@@ -13,8 +13,9 @@ export const startServer = async () => {
 
   const corsOptions: cors.CorsOptions = {
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: process.env.NODE_ENV === "test" ? "*" : process.env.FRONTEND_HOST,
   };
+
   app.use(cors(corsOptions));
   app.use(
     session({
