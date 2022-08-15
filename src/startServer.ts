@@ -1,5 +1,6 @@
 import { createServer } from "@graphql-yoga/node";
 import * as cors from "cors";
+import "dotenv/config";
 import * as express from "express";
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
