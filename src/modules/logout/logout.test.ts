@@ -1,5 +1,3 @@
-//import { loginAndQueryMeTest, noCookieTest } from "../me/me.test";
-
 import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";

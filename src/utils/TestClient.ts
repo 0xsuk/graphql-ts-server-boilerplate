@@ -30,6 +30,13 @@ const meQuery = `
   }
 }
 `;
+const forgotPasswordChangeMutation = (newPassword: string, key: string) => `
+mutation {
+  forgotPasswordChange(newPassword: "${newPassword}", key: "${key}") {
+    path
+    message
+  }
+}`;
 
 export class TestClient {
   url: string;
@@ -59,5 +66,11 @@ export class TestClient {
 
   async me() {
     return this.client.post(this.url, { query: meQuery });
+  }
+
+  async forgotPasswordChange(newPassword: string, key: string) {
+    return this.client.post(this.url, {
+      query: forgotPasswordChangeMutation(newPassword, key),
+    });
   }
 }
