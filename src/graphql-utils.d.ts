@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 import * as session from "express-session";
+import { Request } from "express";
 
 interface Session extends session.Session {
   userId?: string;
@@ -9,7 +10,7 @@ export interface Context {
   redis: Redis;
   url: string;
   session: Session;
-  req: Express.Request;
+  req: Request;
 }
 
 export type Resolver = (

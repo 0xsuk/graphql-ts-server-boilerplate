@@ -58,7 +58,8 @@
     "test-server": "NODE_ENV=test ts-node --files src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
     "test": "NODE_ENV=test jest --forceExit --verbose --runInBand",
-    "gen-schema-types": "ts-node src/scripts/createTypes.ts"
+    "gen-schema-types": "ts-node src/scripts/createTypes.ts",
+    "lint": "eslint . --ext ts"
   },
   "jest": {
     "globalSetup": "./src/testSetup/callSetup.js",
