@@ -7,6 +7,8 @@ import { confirmEmail } from "./routes/confirmEmail";
 import { createTypeormConn } from "./utils/createTypeormConn";
 import { genSchema } from "./utils/genSchema";
 import * as session from "express-session";
+import { Context } from "./graphql-utils";
+import { redisSessionPrefix } from "./constants";
 const RedisStore = require("connect-redis")(session);
 
 export const startServer = async () => {
@@ -17,9 +19,9 @@ export const startServer = async () => {
     origin: process.env.FRONTEND_HOST, //Becareful!: * prevent axios from storing cookie in testing
   };
   const sessionOptions: session.SessionOptions = {
-    store: new RedisStore({ client: redis }),
+    store: new RedisStore({ client: redis, prefix: redisSessionPrefix }),
     name: "qid",
-    secret: "asdfasdfasdf",
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -30,14 +32,12 @@ export const startServer = async () => {
   };
   const graphQLServer = createServer<{ req: express.Request }>({
     schema: genSchema(),
-    context: ({ req }) => {
-      if (process.env.NODE_ENV === "test") {
-        console.log("request headers", req.headers);
-      }
+    context: ({ req }): Context => {
       return {
         redis,
         url: req.protocol + "://" + req.get("host"),
         session: req.session,
+        req,
       };
     },
   });

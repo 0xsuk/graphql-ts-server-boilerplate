@@ -1,7 +1,7 @@
-import request from "graphql-request";
 import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
+import { TestClient } from "../../utils/TestClient";
 import {
   duplicateEmail,
   emailNotLongEnough,
@@ -10,18 +10,8 @@ import {
 } from "./errorMessages";
 
 const endpoint = process.env.TEST_HOST as string;
-
 const email = "toasdfp@bob.com";
 const password = "jasdf";
-
-const mutation = (e: string, p: string) => `
-mutation {
-  register(email: "${e}", password: "${p}") {
-    path
-    message
-  }
-}
-`;
 
 let conn: DataSource;
 
@@ -34,62 +24,80 @@ afterAll(async () => {
 });
 
 describe("Register User", () => {
-  it("check for duplicate emails", async () => {
-    const response = await request(endpoint, mutation(email, password));
-    expect(response).toEqual({ register: null });
-    const users = await User.find({ where: { email } }); //accessing database directly, we have to explicitly specify datasource here again(why?)
+  it("duplicate emails", async () => {
+    const client = new TestClient(endpoint);
+    {
+      const res = await client.register(email, password);
+      expect(res.data.data).toEqual({ register: null });
+    }
+    const users = await User.find({ where: { email } });
     expect(users).toHaveLength(1);
     const user = users[0];
     expect(user.email).toEqual(email);
     expect(user.password).not.toEqual(password);
-    const response2 = await request(endpoint, mutation(email, password));
-    expect(response2.register).toEqual([
-      {
-        path: "email",
-        message: duplicateEmail,
-      },
-    ]);
+
+    {
+      const res = await client.register(email, password);
+      expect(res.data.data).toEqual({
+        register: [
+          {
+            path: "email",
+            message: duplicateEmail,
+          },
+        ],
+      });
+    }
   });
 
   it("check bad email", async () => {
-    const response3 = await request(endpoint, mutation("a", password));
-    expect(response3.register).toEqual([
-      {
-        path: "email",
-        message: emailNotLongEnough,
-      },
-      {
-        path: "email",
-        message: invalidEmail,
-      },
-    ]); //order matters
+    const client = new TestClient(endpoint);
+    const res = await client.register("ba", password);
+    console.log(res.data.data);
+    expect(res.data.data).toEqual({
+      register: [
+        {
+          path: "email",
+          message: emailNotLongEnough,
+        },
+        {
+          path: "email",
+          message: invalidEmail,
+        },
+      ],
+    }); //order matters
   });
 
   it("check bad password", async () => {
-    const response4 = await request(endpoint, mutation(email, "a"));
-    expect(response4.register).toEqual([
-      {
-        path: "password",
-        message: passwordNotLongEnough,
-      },
-    ]); //order matters
+    const client = new TestClient(endpoint);
+    const res = await client.register(email, "ba");
+    expect(res.data.data).toEqual({
+      register: [
+        {
+          path: "password",
+          message: passwordNotLongEnough,
+        },
+      ],
+    }); //order matters
   });
 
   it("check bad email and password", async () => {
-    const response5 = await request(endpoint, mutation("a", "a"));
-    expect(response5.register).toEqual([
-      {
-        path: "email",
-        message: emailNotLongEnough,
-      },
-      {
-        path: "email",
-        message: invalidEmail,
-      },
-      {
-        path: "password",
-        message: passwordNotLongEnough,
-      },
-    ]); //order matters
+    const client = new TestClient(endpoint);
+    const res = await client.register("b", "b");
+    expect(res.data.data).toEqual({
+      register: [
+        {
+          path: "email",
+          message: emailNotLongEnough,
+        },
+        {
+          path: "email",
+          message: invalidEmail,
+        },
+        {
+          path: "password",
+          message: passwordNotLongEnough,
+        },
+      ],
+    }); //order matters
   });
 });

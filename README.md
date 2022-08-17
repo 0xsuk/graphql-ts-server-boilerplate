@@ -11,7 +11,8 @@
 - graphql-import is now deprecated, use graphql-tools
 - node-fetch does not work well with ts jest https://github.com/node-fetch/node-fetch/issues/1289, so use axios instead
   - No need for fetch library anymore as node.js v18 (yet to come) has built-in fetch API
-- use graphql-codegen instead of gql2ts as it is more popular 
+- request-promise is deprecated, so use axios + cookiejar instead
+- use graphql-codegen instead of gql2ts as it is more popular (and ben awad recommends it)
 - use nodemailer instead of sparkpost
 
 A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis

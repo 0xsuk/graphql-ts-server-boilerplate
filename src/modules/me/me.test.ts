@@ -1,8 +1,7 @@
-import { AxiosInstance } from "axios";
 import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
-import { testHttpClient } from "../../utils/testHttpClient";
+import { TestClient } from "../../utils/TestClient";
 
 let conn: DataSource;
 const endpoint = process.env.TEST_HOST as string;
@@ -10,34 +9,12 @@ let userId: string;
 const email = "asdf@email.com";
 const password = "asdfasdf";
 
-const loginMuation = (e: string, p: string) => `
-mutation {
-  login(email: "${e}", password: "${p}") {
-    path
-    message
-  }
-}
-`;
+export const loginAndQueryMeTest = async (client: TestClient) => {
+  await client.login(email, password);
 
-const meQuery = `
-{
-  me {
-    id
-    email
-  }
-}
-`;
+  const res = await client.me(); //if error, check typo in schema.graphql
 
-export const loginAndQueryMeTest = async (client: AxiosInstance) => {
-  await client.post(endpoint, {
-    query: loginMuation(email, password),
-  });
-
-  const response = await client.post(endpoint, {
-    query: meQuery,
-  }); //if error, check typo in schema.graphql
-
-  expect(response.data.data).toEqual({
+  expect(res.data.data).toEqual({
     me: {
       id: userId,
       email,
@@ -47,12 +24,10 @@ export const loginAndQueryMeTest = async (client: AxiosInstance) => {
   return client;
 };
 
-export const noCookieTest = async (client: AxiosInstance) => {
-  const response = await client.post(endpoint, {
-    query: meQuery,
-  });
+export const noCookieTest = async (client: TestClient) => {
+  const res = await client.me();
 
-  expect(response.data.data.me).toBeNull();
+  expect(res.data.data.me).toBeNull();
 };
 
 beforeAll(async () => {
@@ -72,7 +47,7 @@ afterAll(async () => {
 });
 
 describe("me", () => {
-  const client = testHttpClient();
+  const client = new TestClient(endpoint);
   test("return null if no cookie", async () => {
     await noCookieTest(client);
   });
