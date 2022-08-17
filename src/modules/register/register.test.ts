@@ -52,7 +52,6 @@ describe("Register User", () => {
   it("check bad email", async () => {
     const client = new TestClient(endpoint);
     const res = await client.register("ba", password);
-    console.log(res.data.data);
     expect(res.data.data).toEqual({
       register: [
         {

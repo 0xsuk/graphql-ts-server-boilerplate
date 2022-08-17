@@ -27,5 +27,9 @@ import path = require("path");
     },
   });
 
-  fs.writeFile(outputFile, output, () => {});
+  fs.writeFile(outputFile, output, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
 })();

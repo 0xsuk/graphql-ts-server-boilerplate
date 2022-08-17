@@ -1,11 +1,12 @@
 import axios from "axios";
 import Redis from "ioredis";
 import { DataSource } from "typeorm";
+import { confirmEmailPrefix } from "../constants";
 import { User } from "../entity/User";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { createTypeormConn } from "./createTypeormConn";
 
-let redis = new Redis();
+const redis = new Redis();
 
 let conn: DataSource;
 
@@ -29,17 +30,17 @@ it("check it confirms user and cleans key in redis", async () => {
     redis
   );
 
-  const response = await axios.get(url);
+  const res = await axios.get(url);
 
-  const text = await response.data;
+  const text = res.data;
   expect(text).toEqual("ok");
   user = (await User.findOne({ where: { id: user.id } })) as User;
 
   expect(user.confirmed).toBeTruthy();
 
   const chunks = url.split("/");
-  const key = chunks[chunks.length - 1];
-  const value = await redis.get(key);
+  const id = chunks[chunks.length - 1];
+  const value = await redis.get(`${confirmEmailPrefix}${id}`);
 
   expect(value).toBeNull();
 });
