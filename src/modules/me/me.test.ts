@@ -1,9 +1,8 @@
-import axios from "axios";
-import { wrapper } from "axios-cookiejar-support";
-import { CookieJar } from "tough-cookie";
+import { AxiosInstance } from "axios";
 import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
+import { testHttpClient } from "../../utils/testHttpClient";
 
 let conn: DataSource;
 const endpoint = process.env.TEST_HOST as string;
@@ -29,6 +28,33 @@ const meQuery = `
 }
 `;
 
+export const loginAndQueryMeTest = async (client: AxiosInstance) => {
+  await client.post(endpoint, {
+    query: loginMuation(email, password),
+  });
+
+  const response = await client.post(endpoint, {
+    query: meQuery,
+  }); //if error, check typo in schema.graphql
+
+  expect(response.data.data).toEqual({
+    me: {
+      id: userId,
+      email,
+    },
+  });
+
+  return client;
+};
+
+export const noCookieTest = async (client: AxiosInstance) => {
+  const response = await client.post(endpoint, {
+    query: meQuery,
+  });
+
+  expect(response.data.data.me).toBeNull();
+};
+
 beforeAll(async () => {
   conn = await createTypeormConn();
 
@@ -46,30 +72,12 @@ afterAll(async () => {
 });
 
 describe("me", () => {
+  const client = testHttpClient();
   test("return null if no cookie", async () => {
-    const response = await axios.post(endpoint, {
-      query: meQuery,
-    });
-
-    expect(response.data.data.me).toBeNull();
+    await noCookieTest(client);
   });
 
   test("get current user", async () => {
-    const jar = new CookieJar();
-    const client = wrapper(axios.create({ jar }));
-    await client.post(endpoint, {
-      query: loginMuation(email, password),
-    });
-
-    const response = await client.post(endpoint, {
-      query: meQuery,
-    }); //if error, check typo in schema.graphql
-
-    expect(response.data.data).toEqual({
-      me: {
-        id: userId,
-        email,
-      },
-    });
+    await loginAndQueryMeTest(client);
   });
 });

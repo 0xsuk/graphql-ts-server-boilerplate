@@ -6,7 +6,7 @@ import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
 import { createTypeormConn } from "./utils/createTypeormConn";
 import { genSchema } from "./utils/genSchema";
-import session = require("express-session");
+import * as session from "express-session";
 const RedisStore = require("connect-redis")(session);
 
 export const startServer = async () => {
@@ -31,6 +31,9 @@ export const startServer = async () => {
   const graphQLServer = createServer<{ req: express.Request }>({
     schema: genSchema(),
     context: ({ req }) => {
+      if (process.env.NODE_ENV === "test") {
+        console.log("request headers", req.headers);
+      }
       return {
         redis,
         url: req.protocol + "://" + req.get("host"),

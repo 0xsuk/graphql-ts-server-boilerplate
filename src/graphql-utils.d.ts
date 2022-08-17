@@ -1,6 +1,7 @@
 import Redis from "ioredis";
+import * as session from "express-session";
 
-interface Session {
+interface Session extends session.Session {
   userId?: string;
 }
 
