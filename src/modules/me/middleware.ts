@@ -7,11 +7,13 @@ const middleware: GraphQLMiddlwareFunc = async (
   context,
   info
 ) => {
+  //check if user is logged in
+  if (!context.session || !context.session.userId) {
+    return null;
+  }
   //middleware
-  const result = await resolver(parent, args, context, info);
+  return resolver(parent, args, context, info);
   //after middleware
-
-  return result;
 };
 
 export default middleware;

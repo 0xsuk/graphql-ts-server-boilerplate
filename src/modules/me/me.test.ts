@@ -1,4 +1,6 @@
 import axios from "axios";
+import { wrapper } from "axios-cookiejar-support";
+import { CookieJar } from "tough-cookie";
 import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
@@ -44,14 +46,22 @@ afterAll(async () => {
 });
 
 describe("me", () => {
-  test("can't get user if not logged in", async () => {});
+  test("return null if no cookie", async () => {
+    const response = await axios.post(endpoint, {
+      query: meQuery,
+    });
+
+    expect(response.data.data.me).toBeNull();
+  });
+
   test("get current user", async () => {
-    axios.defaults.withCredentials = true;
-    await axios.post(endpoint, {
+    const jar = new CookieJar();
+    const client = wrapper(axios.create({ jar }));
+    await client.post(endpoint, {
       query: loginMuation(email, password),
     });
 
-    const response = await axios.post(endpoint, {
+    const response = await client.post(endpoint, {
       query: meQuery,
     }); //if error, check typo in schema.graphql
 

@@ -5,14 +5,9 @@ import middleware from "./middleware";
 
 export const resolvers: ResolverMap = {
   Query: {
-    me: createMiddleware(middleware, async (_, __, { session }) => {
-      const user = await User.findOne({ where: { id: session.userId } });
-
-      if (!user) {
-        return null;
-      }
-
-      return user;
-    }),
+    me: createMiddleware(middleware, (_, __, { session }) =>
+      //becareful of undefined: https://github.com/typeorm/typeorm/issues/2500
+      User.findOne({ where: { id: session.userId } })
+    ),
   },
 };
