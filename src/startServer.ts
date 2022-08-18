@@ -17,7 +17,7 @@ export const startServer = async () => {
 
   const corsOptions: cors.CorsOptions = {
     credentials: true,
-    origin: process.env.FRONTEND_HOST, //TODO is it working? Becareful!: * prevent axios from storing cookie in testing
+    origin: process.env.FRONTEND_HOST, //Becareful!: * prevent axios from storing cookie in testing
   };
   const sessionOptions: session.SessionOptions = {
     store: new RedisStore({ client: redis, prefix: redisSessionPrefix }),
@@ -56,6 +56,9 @@ export const startServer = async () => {
   app.use(cors(corsOptions));
   app.use(session(sessionOptions));
   app.use(rateLimiter);
+  app.get("/test", (_, res) => {
+    res.send("testing");
+  });
   app.use("/", graphQLServer); //has to be at the last of route definitions because graphQLServer intercepts every route
 
   //https://github.com/typeorm/typeorm/issues/7428
