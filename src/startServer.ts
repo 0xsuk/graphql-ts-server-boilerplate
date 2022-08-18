@@ -8,6 +8,8 @@ import { genSchema } from "./utils/genSchema";
 import * as session from "express-session";
 import { Context } from "./types/graphql-utils";
 import { redisSessionPrefix } from "./constants/redis";
+import RateLimitRedisStore from "rate-limit-redis";
+import rateLimit from "express-rate-limit";
 const RedisStore = require("connect-redis")(session);
 
 export const startServer = async () => {
@@ -15,7 +17,7 @@ export const startServer = async () => {
 
   const corsOptions: cors.CorsOptions = {
     credentials: true,
-    origin: process.env.FRONTEND_HOST, //Becareful!: * prevent axios from storing cookie in testing
+    origin: process.env.FRONTEND_HOST, //TODO is it working? Becareful!: * prevent axios from storing cookie in testing
   };
   const sessionOptions: session.SessionOptions = {
     store: new RedisStore({ client: redis, prefix: redisSessionPrefix }),
@@ -29,6 +31,15 @@ export const startServer = async () => {
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   };
+  const rateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    store: new RateLimitRedisStore({
+      //@ts-ignore
+      sendCommand: async (...args: string[]) => redis.call(...args),
+    }),
+  });
   const graphQLServer = createServer<{ req: express.Request }>({
     schema: genSchema(),
     context: ({ req }): Context => {
@@ -44,6 +55,7 @@ export const startServer = async () => {
   app.use(express.json());
   app.use(cors(corsOptions));
   app.use(session(sessionOptions));
+  app.use(rateLimiter);
   app.use("/", graphQLServer); //has to be at the last of route definitions because graphQLServer intercepts every route
 
   //https://github.com/typeorm/typeorm/issues/7428
