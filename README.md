@@ -2,20 +2,6 @@
 
 \* this repo is a clone of https://github.com/benawad/graphql-ts-server-boilerplate, but with latest packages *
 
-# What's new
-- TypeORM version 0.3.7 (latest)
-  - ormconfig.json is no longer generated. see breaking changes https://github.com/typeorm/typeorm/releases/tag/0.3.0
-  - configure database information in src/data-source.ts
-- other latest dependencies 
-- tslint is now deprecated, use eslint instead
-- graphql-import is now deprecated, use graphql-tools
-- node-fetch does not work well with ts jest https://github.com/node-fetch/node-fetch/issues/1289, so use axios instead
-  - No need for fetch library anymore as node.js v18 (yet to come) has built-in fetch API
-- request-promise is deprecated, so use axios + cookiejar instead
-- use graphql-codegen instead of gql2ts as it is more popular (and ben awad recommends it)
-- use nodemailer instead of sparkpost
-
-A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
 
 ## Installation
 
@@ -59,3 +45,21 @@ You can start the server with `yarn start` then navigate to `http://localhost:40
 ## Watch how it was made
 
 Playlist: https://www.youtube.com/playlist?list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V
+
+## What's new
+- TypeORM version 0.3.7 (latest)
+  - ormconfig.json is no longer generated. see breaking changes https://github.com/typeorm/typeorm/releases/tag/0.3.0
+  - configure database information in src/data-source.ts
+- other latest dependencies 
+- tslint is now deprecated, use eslint instead
+- graphql-import is now deprecated, use graphql-tools
+- node-fetch does not work well with ts jest https://github.com/node-fetch/node-fetch/issues/1289, so use axios instead
+  - No need for fetch library anymore as node.js v18 (yet to come) has built-in fetch API
+- request-promise is deprecated, so use axios + cookiejar instead
+- use graphql-codegen instead of gql2ts as it is more popular (and ben awad recommends it)
+- use nodemailer instead of sparkpost
+- disable multiple session logout at once
+- disable lock account when forgot password email is sent
+- forgotPassword renamed to resetPassword, as it makes more sense
+
+A GraphQL Server boilerplate made with Typescript, PostgreSQL, and Redis
