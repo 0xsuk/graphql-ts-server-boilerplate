@@ -1,27 +1,16 @@
-import * as yup from "yup";
+import { duplicateEmail } from "../../constants/errorMessages";
 import { User } from "../../entity/User";
-import { ResolverMap } from "../../graphql-utils";
+import { ResolverMap } from "../../types/graphql-utils";
 import { MutationRegisterArgs } from "../../types/schema";
-import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
 import { formatYupError } from "../../utils/formatYupError";
-import { sendEmail } from "../../utils/sendEmail";
-import {
-  duplicateEmail,
-  emailNotLongEnough,
-  invalidEmail,
-  passwordNotLongEnough,
-} from "./errorMessages";
-
-const schema = yup.object().shape({
-  email: yup.string().min(3, emailNotLongEnough).max(255).email(invalidEmail),
-  password: yup.string().min(3, passwordNotLongEnough).max(255),
-});
+import { sendConfirmEmailEmail } from "../../utils/sendConfirmEmailEmail";
+import { userSchema } from "../../utils/yupSchemas";
 
 export const resolvers: ResolverMap = {
   Mutation: {
-    register: async (_, args: MutationRegisterArgs, { redis, url }) => {
+    register: async (_, args: MutationRegisterArgs, { redis }) => {
       try {
-        await schema.validate(args, { abortEarly: false }); //await is important
+        await userSchema.validate(args, { abortEarly: false }); //await is important
       } catch (err) {
         return formatYupError(err);
       }
@@ -48,10 +37,7 @@ export const resolvers: ResolverMap = {
       await user.save();
 
       if (process.env.NODE_ENV !== "test") {
-        await sendEmail(
-          email,
-          await createConfirmEmailLink(url, user.id, redis)
-        );
+        await sendConfirmEmailEmail(email, user.id, redis);
       }
       return null;
     },

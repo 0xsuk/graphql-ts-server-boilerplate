@@ -10,6 +10,9 @@ export const genSchema = () => {
   const folders = fs.readdirSync(path.join(__dirname, "../modules"));
   folders.forEach((folder) => {
     const { resolvers } = require(`../modules/${folder}/resolvers`);
+    if (!resolvers) {
+      throw Error("resolvers not found for folder: " + folder);
+    }
     //https://www.graphql-tools.com/docs/migration/migration-from-import
     const typeDefs = loadSchemaSync(
       path.join(__dirname, `../modules/${folder}/schema.graphql`),
@@ -17,6 +20,9 @@ export const genSchema = () => {
         loaders: [new GraphQLFileLoader()],
       }
     );
+    if (!typeDefs) {
+      throw Error("typeDefs not found for folder: " + folder);
+    }
 
     schemas.push(makeExecutableSchema({ typeDefs, resolvers }));
   });

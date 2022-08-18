@@ -30,9 +30,16 @@ const meQuery = `
   }
 }
 `;
-const forgotPasswordChangeMutation = (newPassword: string, key: string) => `
+const confirmEmailMutation = (id: string) => `
 mutation {
-  forgotPasswordChange(newPassword: "${newPassword}", key: "${key}") {
+  confirmEmail(id: "${id}") {
+    path
+    message
+  }
+}`;
+const resetPasswordMutation = (newPassword: string, id: string) => `
+mutation {
+  resetPassword(newPassword: "${newPassword}", id:"${id}") {
     path
     message
   }
@@ -68,9 +75,15 @@ export class TestClient {
     return this.client.post(this.url, { query: meQuery });
   }
 
-  async forgotPasswordChange(newPassword: string, key: string) {
+  async confirmEmail(id: string) {
     return this.client.post(this.url, {
-      query: forgotPasswordChangeMutation(newPassword, key),
+      query: confirmEmailMutation(id),
+    });
+  }
+
+  async resetPassword(newPassword: string, id: string) {
+    return this.client.post(this.url, {
+      query: resetPasswordMutation(newPassword, id),
     });
   }
 }

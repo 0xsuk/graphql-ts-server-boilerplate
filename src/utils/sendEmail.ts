@@ -1,5 +1,9 @@
 import * as nodemailer from "nodemailer";
-export const sendEmail = async (recipient: string, url: string) => {
+export const sendEmail = async (
+  recipient: string,
+  subject: string,
+  text: string
+) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -11,8 +15,8 @@ export const sendEmail = async (recipient: string, url: string) => {
   const mailContents = {
     from: process.env.GMAIL_EMAIL,
     to: recipient,
-    subject: "Confirm Email",
-    text: "confirm your email: " + url,
+    subject,
+    text,
   };
 
   transporter.sendMail(mailContents, (err) => {
@@ -21,6 +25,6 @@ export const sendEmail = async (recipient: string, url: string) => {
       return;
     }
 
-    console.log("confirmation email sent to", recipient);
+    console.log("email sent to", recipient);
   });
 };

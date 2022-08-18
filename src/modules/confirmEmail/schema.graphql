@@ -1,0 +1,6 @@
+#import  Error from "../../shared.graphql"
+
+type Mutation {
+  sendConfirmEmailEmail: Boolean
+  confirmEmail(id: String!): [Error!]
+}

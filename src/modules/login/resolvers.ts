@@ -1,9 +1,8 @@
-import { User } from "../../entity/User";
 import * as bcrypt from "bcryptjs";
-import { ResolverMap } from "../../graphql-utils";
+import { User } from "../../entity/User";
+import { ResolverMap } from "../../types/graphql-utils";
 import { MutationLoginArgs } from "../../types/schema";
-import { confirmEmailError, invalidLogin } from "./errorMessages";
-import { userSessionIdPrefix } from "../../constants";
+import { emailNotConfirmed, invalidLogin } from "../../constants/errorMessages";
 
 const errorResponse = [
   {
@@ -14,11 +13,7 @@ const errorResponse = [
 
 export const resolvers: ResolverMap = {
   Mutation: {
-    login: async (
-      _,
-      { email, password }: MutationLoginArgs,
-      { redis, session, req }
-    ) => {
+    login: async (_, { email, password }: MutationLoginArgs, { session }) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return errorResponse;
@@ -28,7 +23,7 @@ export const resolvers: ResolverMap = {
         return [
           {
             path: "email",
-            message: confirmEmailError,
+            message: emailNotConfirmed,
           },
         ];
       }
@@ -42,9 +37,6 @@ export const resolvers: ResolverMap = {
 
       //login successfull
       session.userId = user.id;
-      if (req.sessionID) {
-        await redis.lpush(`${userSessionIdPrefix}${user.id}`, req.sessionID);
-      }
 
       return null;
     },

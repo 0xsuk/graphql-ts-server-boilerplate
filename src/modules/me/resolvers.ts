@@ -1,5 +1,5 @@
 import { User } from "../../entity/User";
-import { ResolverMap } from "../../graphql-utils";
+import { ResolverMap } from "../../types/graphql-utils";
 import { createMiddleware } from "../../utils/createMiddleware";
 import middleware from "./middleware";
 

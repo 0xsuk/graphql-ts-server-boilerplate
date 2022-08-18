@@ -7,7 +7,7 @@ import {
   emailNotLongEnough,
   invalidEmail,
   passwordNotLongEnough,
-} from "./errorMessages";
+} from "../../constants/errorMessages";
 
 const endpoint = process.env.TEST_HOST as string;
 const email = "toasdfp@bob.com";

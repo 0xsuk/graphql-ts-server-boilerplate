@@ -1,4 +1,4 @@
-import { GraphQLMiddlwareFunc } from "../../graphql-utils";
+import { GraphQLMiddlwareFunc } from "../../types/graphql-utils";
 
 const middleware: GraphQLMiddlwareFunc = async (
   resolver,

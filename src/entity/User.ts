@@ -2,6 +2,7 @@ import * as bcrypt from "bcryptjs";
 import {
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   PrimaryGeneratedColumn,
@@ -19,6 +20,7 @@ export class User extends BaseEntity {
   @Column("boolean", { default: false }) confirmed: boolean;
 
   @BeforeInsert()
+  @BeforeUpdate() //TODO: this is not called by User.update!. I have to `const user = User.findOne` & `user.password = newPassword` & `user.save`
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }

@@ -14,8 +14,18 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  sendConfirmEmailEmail?: Maybe<Scalars['Boolean']>;
+  confirmEmail?: Maybe<Array<Error>>;
   login?: Maybe<Array<Error>>;
+  logout?: Maybe<Scalars['Boolean']>;
   register?: Maybe<Array<Error>>;
+  sendResetPasswordEmail?: Maybe<Scalars['Boolean']>;
+  resetPassword?: Maybe<Array<Error>>;
+};
+
+
+export type MutationConfirmEmailArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -28,6 +38,12 @@ export type MutationLoginArgs = {
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  newPassword: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type Error = {

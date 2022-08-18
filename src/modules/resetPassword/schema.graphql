@@ -1,0 +1,6 @@
+#import  Error from "../../shared.graphql"
+
+type Mutation {
+  sendResetPasswordEmail: Boolean
+  resetPassword(newPassword: String!, id: String!): [Error!]
+}

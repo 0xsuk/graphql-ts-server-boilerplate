@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
 import { TestClient } from "../../utils/TestClient";
-import { confirmEmailError, invalidLogin } from "./errorMessages";
+import { emailNotConfirmed, invalidLogin } from "../../constants/errorMessages";
 
 const endpoint = process.env.TEST_HOST as string;
 
@@ -44,7 +44,7 @@ describe("Login", () => {
     //email not confirmed
     {
       const res = await client.login(email, password);
-      await loginExpectError(res.data.data, confirmEmailError);
+      await loginExpectError(res.data.data, emailNotConfirmed);
     }
     await User.update({ email }, { confirmed: true });
 

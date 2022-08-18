@@ -3,12 +3,11 @@ import * as cors from "cors";
 import "dotenv/config";
 import * as express from "express";
 import { redis } from "./redis";
-import { confirmEmail } from "./routes/confirmEmail";
 import { createTypeormConn } from "./utils/createTypeormConn";
 import { genSchema } from "./utils/genSchema";
 import * as session from "express-session";
-import { Context } from "./graphql-utils";
-import { redisSessionPrefix } from "./constants";
+import { Context } from "./types/graphql-utils";
+import { redisSessionPrefix } from "./constants/redis";
 const RedisStore = require("connect-redis")(session);
 
 export const startServer = async () => {
@@ -35,16 +34,16 @@ export const startServer = async () => {
     context: ({ req }): Context => {
       return {
         redis,
-        url: req.protocol + "://" + req.get("host"),
+        baseUrl: req.protocol + "://" + req.get("host"),
         session: req.session,
         req,
       };
     },
   });
 
+  app.use(express.json());
   app.use(cors(corsOptions));
   app.use(session(sessionOptions));
-  app.get("/confirm/:id", confirmEmail);
   app.use("/", graphQLServer); //has to be at the last of route definitions because graphQLServer intercepts every route
 
   //https://github.com/typeorm/typeorm/issues/7428
