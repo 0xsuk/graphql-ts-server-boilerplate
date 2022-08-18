@@ -43,7 +43,7 @@ describe("Reset Password", () => {
       expect(res.data.data).toEqual({
         resetPassword: [
           {
-            path: "password", //TODO
+            path: "password",
             message: passwordNotLongEnough,
           },
         ],

@@ -2,6 +2,11 @@
 
 \* this repo is a clone of https://github.com/benawad/graphql-ts-server-boilerplate, but with latest packages *
 
+## Tech stack
+- TypeScript
+- GraphQL Yoga & Express
+- Redis
+- Postgresql + TypeORM
 
 ## Installation
 
@@ -34,13 +39,13 @@ You can start the server with `yarn start` then navigate to `http://localhost:40
 
 * Register - Send confirmation email
 * Login
-* Forgot Password
+* Reset Password
 * Logout  
 * Cookies
 * Authentication middleware
 * Rate limiting
-* Locking accounts
-* Testing (probably Jest)
+* ~~Locking accounts~~
+* Testing (Jest)
 
 ## Watch how it was made
 
