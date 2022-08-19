@@ -31,6 +31,13 @@ createdb graphql-ts-server-boilerplate
 
 7. Install and start Redis
 
+8. Set environtment variables in .env
+FRONTEND_HOST: frontend host (eg. http://localhost:3000)
+GMAIL_EMAIL: gmail to send "confirm email" email from  
+GMAIL_PASSWORD: gmail "Application Specific Password". Read more: https://nodemailer.com/usage/using-gmail/  
+SESSION_SECRET=somerandomstring to hash cookie
+
+
 ## Usage
 
 You can start the server with `yarn start` then navigate to `http://localhost:4000` to use GraphQL Playground.

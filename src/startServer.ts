@@ -1,6 +1,6 @@
 import { createServer } from "@graphql-yoga/node";
 import * as cors from "cors";
-import "dotenv/config";
+require("dotenv-safe").config();
 import * as express from "express";
 import { redis } from "./redis";
 import { createTypeormConn } from "./utils/createTypeormConn";
