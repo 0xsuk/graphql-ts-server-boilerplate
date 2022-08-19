@@ -3,13 +3,18 @@ import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
 import { TestClient } from "../../utils/TestClient";
 import { emailNotConfirmed, invalidLogin } from "../../constants/errorMessages";
+import { Error } from "../../types/schema";
 
 const endpoint = process.env.TEST_HOST as string;
 
 const email = "rightemail@email.com";
 const password = "rightpassword";
 
-const loginExpectError = async (response: any, errMsg: string) => {
+interface loginResType {
+  login: [Error] | null;
+}
+
+const loginExpectError = async (response: loginResType, errMsg: string) => {
   expect(response).toEqual({
     login: [
       {

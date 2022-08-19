@@ -1,8 +1,7 @@
 import * as bcrypt from "bcryptjs";
-import { User } from "../../entity/User";
-import { ResolverMap } from "../../types/graphql-utils";
-import { MutationLoginArgs } from "../../types/schema";
 import { emailNotConfirmed, invalidLogin } from "../../constants/errorMessages";
+import { User } from "../../entity/User";
+import { Resolvers } from "../../types/schema";
 
 const errorResponse = [
   {
@@ -11,9 +10,9 @@ const errorResponse = [
   },
 ];
 
-export const resolvers: ResolverMap = {
+export const resolvers: Resolvers = {
   Mutation: {
-    login: async (_, { email, password }: MutationLoginArgs, { session }) => {
+    login: async (_, { email, password }, { session }) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return errorResponse;

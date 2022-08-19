@@ -1,6 +1,8 @@
-import Redis from "ioredis";
-import * as session from "express-session";
 import { Request } from "express";
+import * as session from "express-session";
+import { GraphQLResolveInfo } from "graphql";
+import Redis from "ioredis";
+import { ResolverFn } from "./schema";
 
 interface Session extends session.Session {
   userId?: string;
@@ -13,23 +15,10 @@ export interface Context {
   req: Request;
 }
 
-export type Resolver = (
-  parent: any,
-  args: any,
-  context: Context,
-  info: any
-) => any;
-
 export type GraphQLMiddlwareFunc = (
-  resolver: Resolver,
+  resolver: ResolverFn<{}, {}, Context, GraphQLResolveInfo>,
   parent: any,
   args: any,
   context: Context,
   info: any
 ) => any;
-
-export interface ResolverMap {
-  [key: string]: {
-    [key: string]: Resolver;
-  };
-}

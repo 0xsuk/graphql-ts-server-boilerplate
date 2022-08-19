@@ -1,13 +1,14 @@
 import { User } from "../../entity/User";
-import { ResolverMap } from "../../types/graphql-utils";
-import { createMiddleware } from "../../utils/createMiddleware";
-import middleware from "./middleware";
+import { Resolvers } from "../../types/schema";
 
-export const resolvers: ResolverMap = {
+export const resolvers: Resolvers = {
   Query: {
-    me: createMiddleware(middleware, (_, __, { session }) =>
+    me: async (_, __, { session }) => {
       //becareful of undefined: https://github.com/typeorm/typeorm/issues/2500
-      User.findOne({ where: { id: session.userId } })
-    ),
+      if (!session.userId) {
+        return null;
+      }
+      return User.findOne({ where: { id: session.userId } });
+    },
   },
 };

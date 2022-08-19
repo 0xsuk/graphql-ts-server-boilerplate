@@ -1,11 +1,10 @@
 import { idInvalidOrExpired } from "../../constants/errorMessages";
 import { confirmEmailPrefix } from "../../constants/redis";
 import { User } from "../../entity/User";
-import { ResolverMap } from "../../types/graphql-utils";
-import { MutationConfirmEmailArgs } from "../../types/schema";
+import { Resolvers } from "../../types/schema";
 import { sendConfirmEmailEmail } from "../../utils/sendConfirmEmailEmail";
 
-export const resolvers: ResolverMap = {
+export const resolvers: Resolvers = {
   Mutation: {
     //confirm email is autosent when user registers, but user might want to resend email from here
     sendConfirmEmailEmail: async (_, __, { session, redis }) => {
@@ -19,7 +18,7 @@ export const resolvers: ResolverMap = {
 
       return true;
     },
-    confirmEmail: async (_, { id }: MutationConfirmEmailArgs, { redis }) => {
+    confirmEmail: async (_, { id }, { redis }) => {
       const userId = await redis.get(`${confirmEmailPrefix}${id}`);
       if (!userId) {
         return [

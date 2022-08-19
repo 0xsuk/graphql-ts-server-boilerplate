@@ -20,12 +20,12 @@ import path = require("path");
     plugins: [
       // Each plugin should be an object
       {
-        typescript: {}, // Here you can pass configuration to the plugin
+        typescript: {},
       },
       {
         typescriptResolvers: {
-          contextType: "../types/graphql-utils.d#Context",
-        }, // Here you can pass configuration to the plugin
+          contextType: "../types/graphql-utils.d#Context", //https://www.graphql-code-generator.com/plugins/typescript/typescript-resolvers
+        },
       },
     ],
     pluginMap: {
@@ -36,7 +36,7 @@ import path = require("path");
 
   fs.writeFile(outputFile, output, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
   });
 })();

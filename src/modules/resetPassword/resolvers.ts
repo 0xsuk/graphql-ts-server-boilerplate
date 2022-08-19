@@ -1,13 +1,12 @@
 import { idInvalidOrExpired } from "../../constants/errorMessages";
 import { resetPasswordPrefix } from "../../constants/redis";
 import { User } from "../../entity/User";
-import { ResolverMap } from "../../types/graphql-utils";
-import { MutationResetPasswordArgs } from "../../types/schema";
+import { MutationResetPasswordArgs, Resolvers } from "../../types/schema";
 import { formatYupError } from "../../utils/formatYupError";
 import { sendResetPasswordEmail } from "../../utils/sendResetPasswordEmail";
 import { passwordSchema } from "../../utils/yupSchemas";
 
-export const resolvers: ResolverMap = {
+export const resolvers: Resolvers = {
   Mutation: {
     sendResetPasswordEmail: async (_, __, { redis, session }) => {
       const { userId } = session;

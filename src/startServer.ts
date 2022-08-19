@@ -12,6 +12,8 @@ import RateLimitRedisStore from "rate-limit-redis";
 import rateLimit from "express-rate-limit";
 const RedisStore = require("connect-redis")(session);
 
+type RedisReplay = string | number;
+
 export const startServer = async () => {
   const app = express();
 
@@ -36,8 +38,10 @@ export const startServer = async () => {
     max: 100,
     standardHeaders: true,
     store: new RateLimitRedisStore({
-      //@ts-ignore
-      sendCommand: async (...args: string[]) => redis.call(...args),
+      sendCommand: (...args: string[]) => {
+        //@ts-ignore
+        return redis.call(...args) as Promise<RedisReplay | RedisReplay[]>;
+      },
     }),
   });
   const graphQLServer = createServer<{ req: express.Request }>({
